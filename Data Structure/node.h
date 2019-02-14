@@ -10,9 +10,19 @@ class Node
     
     public:
         Node();
-        Node(T d);
+        Node(T& d);
 
-    friend class LinkedList;
+    template<typename U> friend class LinkedList;
 };
+
+template<typename T>
+Node<T>::Node() : data(0), next(nullptr)
+{
+}
+
+template<typename T>
+Node<T>::Node(T& d) : data(d), next(nullptr)
+{
+}
 
 #endif
