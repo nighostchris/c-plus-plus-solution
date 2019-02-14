@@ -128,13 +128,13 @@ void LinkedList<T>::delete_back()
         {
             Node<T>* dummy = head;
 
-            while (dummy->next != nullptr)
+            while (dummy->next->next != nullptr)
             {
                 dummy = dummy->next;
             }
 
-            delete dummy;
-            dummy = nullptr;       
+            delete dummy->next;
+            dummy->next = nullptr;       
         }
     }
 }
@@ -148,11 +148,14 @@ void LinkedList<T>::delete_node(T data)
 
         Node<T>* dummy = head;
 
-        while (dummy->next != nullptr && dummy->next != head)
+        while (dummy->next != nullptr && dummy->next != target_node)
         {
             dummy = dummy->next;
         }
 
+        Node<T>* target_node_next = dummy->next->next;
+        delete dummy->next;
+        dummy->next = target_node_next;
     }
 }
 
