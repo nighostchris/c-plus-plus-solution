@@ -14,16 +14,17 @@ class LinkedList
     
     public:
         LinkedList();
+        ~LinkedList();
 
         void insert_front(T data);
-        void insert_back(T& data);
-        void insert_node(Node<T>* ancestor, T& data);
+        void insert_back(T data);
+        void insert_node(Node<T>* ancestor, T data);
         
-        void delete_front(T& data);
-        void delete_back(T& data);
-        void delete_node(Node<T>* ancestor);
+        void delete_front();
+        void delete_back();
+        void delete_node(T data);
         
-        Node<T>* find(T& data);
+        Node<T>* find(T data);
         bool empty();
         void traverse();
 };
@@ -31,6 +32,19 @@ class LinkedList
 template<typename T>
 LinkedList<T>::LinkedList() : head(nullptr)
 {
+}
+
+template<typename T>
+LinkedList<T>::~LinkedList()
+{
+    Node<T>* itr = head;
+
+    while (itr != nullptr)
+    {
+        Node<T>* dummy = itr;
+        itr = itr->next;
+        delete dummy;
+    }
 }
 
 template<typename T>
@@ -51,41 +65,103 @@ void LinkedList<T>::insert_front(T data)
 }
 
 template<typename T>
-void insert_back(T& data)
+void LinkedList<T>::insert_back(T data)
 {
+    Node<T>* dummy = new Node<T>(data);
 
-}
-
-template<typename T>
-void insert_node(Node<T>* ancestor, T& data)
-{
-
-}
-
-template<typename T>        
-void delete_front(T& data)
-{
-
-}
-
-template<typename T>
-void delete_back(T& data)
-{
-
-}
-
-template<typename T>
-void delete_node(Node<T>* ancestor)
-{
-
-}
-
-template<typename T>        
-Node<T>* find(T& data)
-{
-    if (!LinkedList<T>::empty())
+    if (empty())
     {
-        Node<T>* temp = Node<T>::head;
+        head = dummy;
+    }
+    else
+    {
+        Node<T>* itr = head;
+
+        while (itr->next != nullptr)
+        {
+            itr = itr->next;
+        }
+
+        itr->next = dummy;
+    }
+}
+
+template<typename T>
+void LinkedList<T>::insert_node(Node<T>* ancestor, T data)
+{
+    Node<T>* temp = ancestor->next;
+    Node<T>* dummy = new Node<T>(data);
+    ancestor->next = dummy;
+    dummy->next = temp;
+}
+
+template<typename T>        
+void LinkedList<T>::delete_front()
+{
+    if (!empty())
+    {
+        if (head->next == nullptr)
+        {
+            delete head;
+            head = nullptr;
+        }
+        else
+        {
+            Node<T>* dummy = head->next;
+            delete head;
+            head = dummy;   
+        }
+    }
+}
+
+template<typename T>
+void LinkedList<T>::delete_back()
+{
+    if (!empty())
+    {
+        if (head->next == nullptr)
+        {
+            delete head;
+            head = nullptr;
+        }
+        else
+        {
+            Node<T>* dummy = head;
+
+            while (dummy->next != nullptr)
+            {
+                dummy = dummy->next;
+            }
+
+            delete dummy;
+            dummy = nullptr;       
+        }
+    }
+}
+
+template<typename T>
+void LinkedList<T>::delete_node(T data)
+{
+    if (!empty())
+    {
+        Node<T>* target_node = find(data);
+
+        Node<T>* dummy = head;
+
+        while (dummy->next != nullptr && dummy->next != head)
+        {
+            dummy = dummy->next;
+        }
+
+    }
+}
+
+template<typename T>        
+Node<T>* LinkedList<T>::find(T data)
+{
+    if (!empty())
+    {
+        Node<T>* temp = head;
         
         while (temp->next != nullptr)
         {
@@ -95,7 +171,7 @@ Node<T>* find(T& data)
             }
             else
             {
-                temp = temp->head;
+                temp = temp->next;
             }
         }
     }
@@ -114,16 +190,23 @@ void LinkedList<T>::traverse()
 {
     cout << "Data in LinkedList: ";
 
-    Node<T>* temp = head;
-    cout << temp->data;
-    temp = temp->next;
-
-    while(temp->next != nullptr)
+    if (empty())
     {
-        cout << " -> " << temp->data;
-
-        temp = temp->next;
+        cout << "Empty";
     }
+    else
+    {
+        Node<T>* temp = head;
+        cout << temp->data;
+
+        while(temp->next != nullptr)
+        {
+            temp = temp->next;
+            cout << " -> " << temp->data;
+        }
+    }
+
+    cout << endl;
 }
 
 #endif
