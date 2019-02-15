@@ -1,23 +1,21 @@
-#ifndef STACK_H_
-#define STACK_H_
+#ifndef QUEUE_H_
+#define QUEUE_H_
 
-#include <iostream>
-#include <vector>
-
-using namespace std;
+#include<vector>
 
 template<typename T>
-class Stack
+class Queue
 {
     private:
         vector<T> container;
 
     public:
-        Stack();
+        Queue();
 
         void push(const T& data);
         T pop();
-        T top() const;
+        T front();
+        T back();
 
         bool empty();
         int size();
@@ -25,50 +23,56 @@ class Stack
 };
 
 template<typename T>
-Stack<T>::Stack()
+Queue<T>::Queue()
 {
 }
 
 template<typename T>
-void Stack<T>::push(const T& data)
+void Queue<T>::push(const T& data)
 {
     container.push_back(data);
 }
 
 template<typename T>
-T Stack<T>::pop()
+T Queue<T>::pop()
 {
-    T result = top();
-    container.pop_back();
-    return result;
+    T dummy = front();
+    container.erase(container.begin());
+    return dummy;
 }
 
 template<typename T>
-T Stack<T>::top() const
+T Queue<T>::front()
+{
+    return container.front();
+}
+
+template<typename T>
+T Queue<T>::back()
 {
     return container.back();
 }
 
 template<typename T>
-bool Stack<T>::empty()
+bool Queue<T>::empty()
 {
     return container.empty();
 }
 
 template<typename T>
-int Stack<T>::size()
+int Queue<T>::size()
 {
     return container.size();
 }
 
 template<typename T>
-void Stack<T>::traverse()
+void Queue<T>::traverse()
 {
-    cout << "Data in Stack: " << endl;
+    cout << "Data in Queue: ";
     
-    for (typename vector<T>::iterator itr = container.end() - 1; itr >= container.begin(); itr--)
+    for (typename vector<T>::iterator itr = container.begin(); itr < container.end(); itr++)
     {
-        if (itr == container.end() - 1)
+        if (itr == container.begin())
         {
             cout << *itr;
         }
